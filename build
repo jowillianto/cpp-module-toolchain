@@ -1,0 +1,14 @@
+#!/bin/bash
+LLVM_VERSION=$1
+UBUNTU_VERSION=$2
+IMAGE_NAME=$UBUNTU_VERSION-cmake3.31-ninja1.11-llvm$LLVM_VERSION
+
+echo "Building Docker image with name $IMAGE_NAME"
+
+docker buildx build \
+  -t jowillianto/cpp-module-toolchain:$IMAGE_NAME \
+  --platform=linux/arm64,linux/amd64 \
+  --build-arg LLVM_VERSION=$LLVM_VERSION \
+  --build-arg UBUNTU_VERSION=$UBUNTU_VERSION \
+  --push \
+  .

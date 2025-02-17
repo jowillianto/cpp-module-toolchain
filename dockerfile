@@ -1,4 +1,5 @@
-FROM ubuntu:jammy AS cmake
+ARG UBUNTU_VERSION="24.04"
+FROM ubuntu:${UBUNTU_VERSION} AS cmake
 RUN echo "Acquire::http::Pipeline-Depth 0; \n Acquire::http::No-Cache true; \n Acquire::BrokenProxy true;" > /etc/apt/apt.conf.d/99fixbadproxy
 RUN apt clean
 RUN rm -rf /var/lib/apt/lists/*
@@ -16,7 +17,7 @@ RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 16FAAD7AF99A65E2
 RUN apt update && apt install -y cmake=3.31.5-0kitware1ubuntu22.04.1
 
 # Install Ninja
-FROM ubuntu:jammy AS ninja
+FROM ubuntu:${UBUNTU_VERSION} AS ninja
 RUN apt update && apt install -y \
   curl \
   cmake \
@@ -30,7 +31,7 @@ WORKDIR /opt/ninja-1.12.1/build
 RUN make
 RUN cp ninja /usr/bin/ninja
 
-FROM ubuntu:jammy AS llvm
+FROM ubuntu:${UBUNTU_VERSION} AS llvm
 ARG LLVM_VERSION="17"
 # Install LLVM
 RUN apt update -o Acquire::CompressionTypes::Order::=gz && apt install -y \
