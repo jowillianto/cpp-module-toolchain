@@ -11,4 +11,4 @@ docker buildx build \
   --build-arg LLVM_VERSION=$LLVM_VERSION \
   --build-arg UBUNTU_VERSION=$UBUNTU_VERSION \
   --push \
-  .
+  "${@:3}"

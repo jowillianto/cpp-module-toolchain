@@ -5,7 +5,7 @@ RUN apt clean
 RUN rm -rf /var/lib/apt/lists/*
 
 # Get add-apt-repository
-RUN apt update && apt install -y software-properties-common
+RUN apt update -o Acquire::CompressionTypes::Order::=gz && apt install -y software-properties-common
 
 # Add CMAKE Dependencies
 RUN wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | \
@@ -14,11 +14,11 @@ RUN wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/nul
 RUN apt-add-repository "deb https://apt.kitware.com/ubuntu/ $(lsb_release -cs) main"
 RUN rm /etc/apt/trusted.gpg.d/kitware.gpg
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 16FAAD7AF99A65E2
-RUN apt update && apt install -y cmake=3.31.5-0kitware1ubuntu22.04.1
+RUN apt update && apt install -y cmake
 
 # Install Ninja
 FROM ubuntu:${UBUNTU_VERSION} AS ninja
-RUN apt update && apt install -y \
+RUN apt update -o Acquire::CompressionTypes::Order::=gz && apt install -y \
   curl \
   cmake \
   g++
